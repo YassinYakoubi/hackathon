@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Medical AI Assistant</title>
+  <style>
+    body { font-family: Arial; margin: 40px; background: #f5f5f5; }
+    #chat { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    #messages { border: 1px solid #ddd; padding: 15px; height: 400px; overflow-y: auto; background: #fafafa; border-radius: 4px; }
+    .msg { margin: 12px 0; padding: 10px; border-radius: 6px; }
+    .user { background: #e3f2fd; color: #1976d2; }
+    .ai { background: #f1f8e9; color: #558b2f; }
+    #input { width: 80%; padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 4px; }
+    #sendBtn { padding: 10px 20px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    #sendBtn:hover { background: #45a049; }
+    .disclaimer { font-size: 12px; color: #666; margin-top: 10px; font-style: italic; }
+  </style>
+</head>
+<body>
+
+  <div id="chat">
+    <h2>🏥 Medical AI Assistant</h2>
+    <p class="disclaimer">⚠️ This is an AI assistant for informational purposes only. Always consult a healthcare professional for medical advice.</p>
+    <div id="messages"></div>
+
+    <input type="text" id="input" placeholder="Describe your symptoms or ask a medical question..." autocomplete="off" />
+    <button id="sendBtn">Send</button>
+  </div>
+
+  <script>
+    const messagesEl = document.getElementById("messages");
+    const inputEl = document.getElementById("input");
+    const sendBtn = document.getElementById("sendBtn");
+
+    sendBtn.onclick = async () => {
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      addMessage("You", text, "user");
+      inputEl.value = "";
+      sendBtn.disabled = true;
+      sendBtn.textContent = "Thinking...";
+
+      try {
+        const res = await fetch("http://localhost:3000/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+
+        const data = await res.json();
+        addMessage("AI Assistant", data.reply, "ai");
+      } catch (error) {
+        addMessage("Error", "Failed to get response. Please try again.", "ai");
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = "Send";
+      }
+    };
+
+    inputEl.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") sendBtn.click();
+    });
+
+    function addMessage(who, text, cls) {
+      const div = document.createElement("div");
+      div.classList.add("msg", cls);
+      div.innerHTML = `<strong>${who}:</strong><br>${text}`;
+      messagesEl.appendChild(div);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+  </script>
+
+</body>
+</html>
