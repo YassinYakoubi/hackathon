@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat - Wellbeing Companion</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="navbar.css">
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    .page-content {
+      padding-top: 100px;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .chat-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      border: 1px solid rgba(70, 196, 126, 0.1);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, 
+        rgba(70, 196, 126, 0.15) 0%, 
+        rgba(58, 166, 105, 0.15) 100%);
+      padding: 25px 30px;
+      border-bottom: 1px solid rgba(70, 196, 126, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .persona-icon {
+      font-size: 48px;
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 4px 16px rgba(70, 196, 126, 0.2);
+      background-image: url(icon.jpeg) no-repeat center;
+    }
+
+    .chat-header-content h1 {
+      font-size: 24px;
+      color: var(--text-dark);
+      margin-bottom: 5px;
+    }
+
+    .chat-header-content p {
+      color: var(--text-medium);
+      font-size: 15px;
+    }
+
+    #messages {
+      height: 500px;
+      overflow-y: auto;
+      padding: 30px;
+      background: rgba(247, 250, 252, 0.5);
+    }
+
+    .msg {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      animation: messageSlideIn 0.3s ease;
+    }
+
+    @keyframes messageSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .msg-header {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-dark);
+      font-size: 14px;
+    }
+
+    .msg.user .msg-header {
+      color: var(--primary-green);
+    }
+
+    .msg-content {
+      padding: 15px 20px;
+      border-radius: 16px;
+      line-height: 1.6;
+      max-width: 85%;
+    }
+
+    .msg.user .msg-content {
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg.ai .msg-content {
+      background: white;
+      color: var(--text-dark);
+      border: 1px solid rgba(70, 196, 126, 0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      border-bottom-left-radius: 4px;
+    }
+
+    .msg.error .msg-content {
+      background: rgba(239, 68, 68, 0.1);
+      color: #dc2626;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .modelInfo {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .input-area {
+      padding: 20px 30px;
+      background: white;
+      border-top: 1px solid rgba(70, 196, 126, 0.1);
+      display: flex;
+      gap: 15px;
+    }
+
+    #userInput {
+      flex: 1;
+      padding: 15px 20px;
+      border: 2px solid rgba(70, 196, 126, 0.2);
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+
+    #userInput:focus {
+      outline: none;
+      border-color: var(--primary-green);
+      box-shadow: 0 0 0 3px rgba(70, 196, 126, 0.1);
+    }
+
+    #sendBtn {
+      padding: 15px 30px;
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(70, 196, 126, 0.3);
+    }
+
+    #sendBtn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(70, 196, 126, 0.4);
+    }
+
+    #sendBtn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+      .page-content {
+        padding-top: 80px;
+      }
+
+      #messages {
+        height: 400px;
+        padding: 20px;
+      }
+
+      .msg-content {
+        max-width: 90%;
+      }
+    }
+  </style>
+</head>
+<body data-page="chat">
+
+  <div class="page-content">
+    <div class="container">
+      <div class="chat-card fade-in">
+        <div class="chat-header">
+          <div class="persona-icon" id="persona-icon">💚</div>
+          <div class="chat-header-content">
+            <h1 id="persona-name">AI Companion</h1>
+            <p id="persona-desc">Here to support your wellbeing journey</p>
+          </div>
+        </div>
+
+        <div id="messages"></div>
+
+        <div class="input-area">
+          <input 
+            type="text" 
+            id="userInput" 
+            placeholder="Share what's on your mind..." 
+            autocomplete="off"
+          />
+          <button id="sendBtn">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="navbar.js"></script>
+  <script>
+    const messagesEl = document.getElementById("messages");
+    const inputEl = document.getElementById("userInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    // Load user profile
+    let userProfile = null;
+    try {
+      const stored = sessionStorage.getItem('userProfile');
+      if (stored) {
+        userProfile = JSON.parse(stored);
+        console.log('✅ Loaded user profile:', userProfile);
+        
+        // Update UI with persona
+        if (userProfile.persona) {
+          document.getElementById('persona-icon').textContent = userProfile.persona.emoji;
+          document.getElementById('persona-name').textContent = userProfile.persona.name;
+          document.getElementById('persona-desc').textContent = userProfile.persona.tagline;
+        }
+      } else {
+        // Redirect to quiz if no profile
+        window.location.href = 'quiz.html';
+      }
+    } catch (e) {
+      console.error('Failed to load user profile:', e);
+    }
+
+    // Load chat history from localStorage
+    function loadChatHistory() {
+      try {
+        const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+        history.forEach(msg => {
+          addMessage(msg.sender, msg.content, msg.type, false);
+        });
+        console.log(`✅ Loaded ${history.length} messages from history`);
+      } catch (e) {
+        console.error('Failed to load chat history:', e);
+      }
+    }
+
+    // Save message to localStorage
+    function saveMessage(sender, content, type) {
+      try {
+        const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+        history.push({ sender, content, type, timestamp: new Date().toISOString() });
+        
+        // Keep only last 50 messages
+        if (history.length > 50) {
+          history.splice(0, history.length - 50);
+        }
+        
+        localStorage.setItem('chatHistory', JSON.stringify(history));
+      } catch (e) {
+        console.error('Failed to save message:', e);
+      }
+    }
+
+    function addMessage(sender, text, type = "user", save = true) {
+      const msgDiv = document.createElement("div");
+      msgDiv.className = `msg ${type}`;
+      msgDiv.innerHTML = `
+        <div class="msg-header">${sender}</div>
+        <div class="msg-content">${text}</div>
+      `;
+      messagesEl.appendChild(msgDiv);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      
+      if (save) {
+        saveMessage(sender, text, type);
+      }
+    }
+
+    function updateDashboard(metrics) {
+      try {
+        let dashboardData = {
+          moodScores: [],
+          resilienceScores: [],
+          energyScores: [],
+          conversations: [],
+          insights: [],
+          timestamps: []
+        };
+
+        const stored = localStorage.getItem('dashboardData');
+        if (stored) {
+          dashboardData = JSON.parse(stored);
+        }
+
+        dashboardData.moodScores.push(metrics.moodScore);
+        dashboardData.energyScores.push(metrics.energyScore);
+        dashboardData.resilienceScores.push(metrics.resilienceScore);
+        dashboardData.timestamps.push(metrics.timestamp);
+        dashboardData.conversations.push({
+          timestamp: metrics.timestamp,
+          mood: metrics.moodScore
+        });
+
+        if (metrics.insights && metrics.insights.length > 0) {
+          dashboardData.insights.push(...metrics.insights);
+        }
+
+        const maxPoints = 30;
+        if (dashboardData.moodScores.length > maxPoints) {
+          dashboardData.moodScores = dashboardData.moodScores.slice(-maxPoints);
+          dashboardData.energyScores = dashboardData.energyScores.slice(-maxPoints);
+          dashboardData.resilienceScores = dashboardData.resilienceScores.slice(-maxPoints);
+          dashboardData.timestamps = dashboardData.timestamps.slice(-maxPoints);
+        }
+
+        localStorage.setItem('dashboardData', JSON.stringify(dashboardData));
+        console.log('📊 Dashboard updated with new metrics');
+
+      } catch (error) {
+        console.error('Failed to update dashboard:', error);
+      }
+    }
+
+    function saveTasks(tasks) {
+      try {
+        const existingTasks = JSON.parse(localStorage.getItem('userTasks') || '[]');
+        const allTasks = [...existingTasks, ...tasks];
+        localStorage.setItem('userTasks', JSON.stringify(allTasks));
+        console.log('📝 Saved new tasks:', tasks.length);
+      } catch (error) {
+        console.error('Failed to save tasks:', error);
+      }
+    }
+
+    sendBtn.onclick = async () => {
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      addMessage("You", text, "user");
+      inputEl.value = "";
+      sendBtn.disabled = true;
+      sendBtn.textContent = "Thinking...";
+
+      try {
+        const res = await fetch("http://localhost:3001/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: text,
+            userProfile: userProfile,
+            conversationId: "main"
+          })
+        });
+
+        const data = await res.json();
+        if (data.reply) {
+          const modelInfo = data.model ? `<div class="modelInfo">via ${data.model}</div>` : '';
+          const personaName = userProfile?.persona.name || "AI Companion";
+          addMessage(personaName, data.reply + modelInfo, "ai");
+          
+          if (data.dashboardMetrics) {
+            updateDashboard(data.dashboardMetrics);
+          }
+          
+          if (data.newTasks && data.newTasks.length > 0) {
+            saveTasks(data.newTasks);
+            
+            const taskNotification = document.createElement('div');
+            taskNotification.style.cssText = `
+              position: fixed;
+              bottom: 20px;
+              right: 20px;
+              background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+              color: white;
+              padding: 20px 28px;
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(70, 196, 126, 0.4);
+              z-index: 1000;
+              cursor: pointer;
+              animation: slideIn 0.4s ease;
+              max-width: 320px;
+            `;
+            taskNotification.innerHTML = `
+              <div style="font-weight: 700; margin-bottom: 8px; font-size: 16px;">📚 ${data.newTasks.length} New Tasks!</div>
+              <div style="font-size: 14px; opacity: 0.95; line-height: 1.4;">Click to view your personalized resources</div>
+            `;
+            taskNotification.onclick = () => window.location.href = 'tasks.html';
+            document.body.appendChild(taskNotification);
+            
+            setTimeout(() => {
+              taskNotification.style.animation = 'slideOut 0.4s ease';
+              setTimeout(() => taskNotification.remove(), 400);
+            }, 5000);
+          }
+        } else {
+          addMessage("Error", data.error || "No response received", "error");
+        }
+      } catch (error) {
+        addMessage("Error", "Failed to connect. Make sure the server is running on port 3001.", "error");
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = "Send";
+      }
+    };
+
+    inputEl.addEventListener("keypress", (e) => {
+      if (e.key === "Enter" && !sendBtn.disabled) {
+        sendBtn.click();
+      }
+    });
+
+    function clearConversation() {
+      if (confirm("Clear chat history? This cannot be undone.")) {
+        localStorage.removeItem('chatHistory');
+        messagesEl.innerHTML = '';
+        console.log('🗑️ Chat history cleared');
+      }
+    }
+
+    // Load chat history on page load
+    loadChatHistory();
+
+    // Add welcome message if no history
+    if (messagesEl.children.length === 0 && userProfile) {
+      addMessage(
+        userProfile.persona.name,
+        `Hi! I'm ${userProfile.persona.name}. ${userProfile.persona.tagline}`,
+        "ai"
+      );
+    }
+  </script>
+
+</body>
+</html>

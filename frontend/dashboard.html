@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Wellbeing Companion</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="navbar.css">
+  <style>
+    body {
+      padding: 0;
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .dashboard-header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      text-align: center;
+    }
+
+    .dashboard-header h1 {
+      font-size: 42px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .dashboard-header p {
+      color: var(--text-medium);
+      font-size: 18px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+      border: 2px solid rgba(70, 196, 126, 0.1);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      border-color: var(--primary-green);
+    }
+
+    .stat-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .stat-value {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--primary-green);
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      font-size: 16px;
+      color: var(--text-medium);
+      font-weight: 600;
+    }
+
+    .stat-sublabel {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-top: 5px;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .chart-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      border: 2px solid rgba(70, 196, 126, 0.1);
+    }
+
+    .chart-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .insights-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      border: 2px solid rgba(70, 196, 126, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .insights-section h3 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .insight-item {
+      display: flex;
+      gap: 15px;
+      padding: 20px;
+      background: rgba(70, 196, 126, 0.05);
+      border-radius: 16px;
+      margin-bottom: 15px;
+      border-left: 4px solid var(--primary-green);
+      transition: all 0.3s ease;
+    }
+
+    .insight-item:hover {
+      background: rgba(70, 196, 126, 0.1);
+      transform: translateX(5px);
+    }
+
+    .insight-icon {
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+
+    .insight-content {
+      flex: 1;
+    }
+
+    .insight-content p {
+      font-size: 16px;
+      color: var(--text-dark);
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+
+    .insight-content small {
+      font-size: 13px;
+      color: var(--text-medium);
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px;
+      background: rgba(70, 196, 126, 0.05);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .task-item:hover {
+      background: rgba(70, 196, 126, 0.1);
+      border-color: rgba(70, 196, 126, 0.2);
+      transform: translateX(5px);
+    }
+
+    .task-item.completed {
+      opacity: 0.6;
+      background: rgba(70, 196, 126, 0.1);
+    }
+
+    .task-checkbox {
+      width: 24px;
+      height: 24px;
+      border: 3px solid var(--primary-green);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .task-checkbox:hover {
+      background: rgba(70, 196, 126, 0.1);
+      transform: scale(1.1);
+    }
+
+    .task-checkbox.checked {
+      background: var(--primary-green);
+      border-color: var(--primary-green);
+    }
+
+    .task-checkbox.checked::after {
+      content: '✓';
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .task-text {
+      flex: 1;
+      font-size: 15px;
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+
+    .task-item.completed .task-text {
+      text-decoration: line-through;
+      color: var(--text-medium);
+    }
+
+    .task-link {
+      color: var(--primary-green);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      background: rgba(70, 196, 126, 0.1);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .task-link:hover {
+      background: var(--primary-green);
+      color: white;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 30px;
+      color: var(--text-medium);
+    }
+
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-header h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+<body data-page="dashboard">
+
+  <div class="page-content">
+    <div class="container">
+      <div class="dashboard-header fade-in">
+        <h1>📊 Your Wellbeing Dashboard</h1>
+        <p>Track your progress and insights over time</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid fade-in" style="animation-delay: 0.1s;">
+        <div class="stat-card">
+          <div class="stat-icon">😊</div>
+          <div class="stat-value" id="avg-mood">-</div>
+          <div class="stat-label">Average Mood</div>
+          <div class="stat-sublabel">Out of 10</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-value" id="avg-energy">-</div>
+          <div class="stat-label">Energy Level</div>
+          <div class="stat-sublabel">Out of 10</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">💪</div>
+          <div class="stat-value" id="avg-resilience">-</div>
+          <div class="stat-label">Resilience</div>
+          <div class="stat-sublabel">Out of 10</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">📚</div>
+          <div class="stat-value" id="task-completion">-</div>
+          <div class="stat-label">Task Progress</div>
+          <div class="stat-sublabel" id="task-completion-text">No tasks yet</div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-grid fade-in" style="animation-delay: 0.2s;">
+        <div class="chart-card">
+          <h3>📈 Mood Trends</h3>
+          <canvas id="moodChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+          <h3>⚡ Energy & Resilience</h3>
+          <canvas id="energyChart"></canvas>
+        </div>
+      </div>
+
+      <!-- AI Insights & Tasks -->
+      <div class="insights-section fade-in" style="animation-delay: 0.3s;">
+        <h3>🧠 AI Insights & Recommended Tasks</h3>
+        
+        <div id="insights-container">
+          <div class="empty-state">
+            <div class="empty-state-icon">💬</div>
+            <p>Start chatting to see your personalized insights!</p>
+          </div>
+        </div>
+
+        <div id="tasks-section" style="margin-top: 30px; display: none;">
+          <h4 style="font-size: 18px; color: var(--text-dark); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+            📚 Your Tasks
+            <span id="task-progress" style="font-size: 14px; color: var(--text-medium); font-weight: 500;"></span>
+          </h4>
+          <div id="tasks-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="navbar.js"></script>
+  <script>
+    let moodChart, energyChart;
+    const conversationId = "main";
+
+    // Load dashboard data from backend
+    async function loadDashboardData() {
+      try {
+        const response = await fetch(`http://localhost:3001/dashboard/${conversationId}`);
+        const data = await response.json();
+        
+        console.log('📊 Dashboard data:', data);
+        
+        if (data.metrics && data.metrics.length > 0) {
+          updateCharts(data.metrics);
+          updateStats(data.summary);
+          updateInsights(data.metrics);
+        } else {
+          showEmptyState();
+        }
+        
+        if (data.tasks && data.tasks.length > 0) {
+          displayTasks(data.tasks);
+        }
+        
+      } catch (error) {
+        console.error('❌ Failed to load dashboard:', error);
+        showEmptyState();
+      }
+    }
+
+    // Update charts with date labels
+    function updateCharts(metrics) {
+      // Format dates for labels
+      const labels = metrics.map(m => {
+        const date = new Date(m.timestamp);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      });
+      
+      const moodData = metrics.map(m => m.moodScore);
+      const energyData = metrics.map(m => m.energyScore);
+      const resilienceData = metrics.map(m => m.resilienceScore);
+
+      // Mood Chart
+      const moodCtx = document.getElementById('moodChart').getContext('2d');
+      if (moodChart) moodChart.destroy();
+      
+      moodChart = new Chart(moodCtx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Mood Score',
+            data: moodData,
+            borderColor: '#46c47e',
+            backgroundColor: 'rgba(70, 196, 126, 0.1)',
+            tension: 0.4,
+            fill: true,
+            pointRadius: 4,
+            pointHoverRadius: 7,
+            pointBackgroundColor: '#46c47e',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            borderWidth: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: { 
+              display: true,
+              position: 'top',
+              labels: { 
+                color: '#6b7280',
+                font: { size: 14, weight: '600' },
+                padding: 15
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              titleColor: '#1f2937',
+              bodyColor: '#6b7280',
+              borderColor: '#46c47e',
+              borderWidth: 2,
+              padding: 12,
+              displayColors: true,
+              callbacks: {
+                label: function(context) {
+                  return `Mood: ${context.parsed.y.toFixed(1)}/10`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 10,
+              ticks: { 
+                color: '#6b7280',
+                font: { size: 12 },
+                callback: function(value) {
+                  return value + '/10';
+                }
+              },
+              grid: { color: 'rgba(0, 0, 0, 0.05)' }
+            },
+            x: {
+              ticks: { 
+                color: '#6b7280',
+                font: { size: 11 },
+                maxRotation: 45,
+                minRotation: 45
+              },
+              grid: { display: false }
+            }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'index'
+          }
+        }
+      });
+
+      // Energy Chart
+      const energyCtx = document.getElementById('energyChart').getContext('2d');
+      if (energyChart) energyChart.destroy();
+      
+      energyChart = new Chart(energyCtx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Energy',
+              data: energyData,
+              borderColor: '#f59e0b',
+              backgroundColor: 'rgba(245, 158, 11, 0.1)',
+              tension: 0.4,
+              fill: true,
+              pointRadius: 4,
+              pointHoverRadius: 7,
+              pointBackgroundColor: '#f59e0b',
+              pointBorderColor: '#fff',
+              pointBorderWidth: 2,
+              borderWidth: 3
+            },
+            {
+              label: 'Resilience',
+              data: resilienceData,
+              borderColor: '#8b5cf6',
+              backgroundColor: 'rgba(139, 92, 246, 0.1)',
+              tension: 0.4,
+              fill: true,
+              pointRadius: 4,
+              pointHoverRadius: 7,
+              pointBackgroundColor: '#8b5cf6',
+              pointBorderColor: '#fff',
+              pointBorderWidth: 2,
+              borderWidth: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: { 
+                color: '#6b7280',
+                font: { size: 14, weight: '600' },
+                padding: 15 
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              titleColor: '#1f2937',
+              bodyColor: '#6b7280',
+              borderColor: '#46c47e',
+              borderWidth: 2,
+              padding: 12,
+              callbacks: {
+                label: function(context) {
+                  return `${context.dataset.label}: ${context.parsed.y.toFixed(1)}/10`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 10,
+              ticks: { 
+                color: '#6b7280',
+                font: { size: 12 },
+                callback: function(value) {
+                  return value + '/10';
+                }
+              },
+              grid: { color: 'rgba(0, 0, 0, 0.05)' }
+            },
+            x: {
+              ticks: { 
+                color: '#6b7280',
+                font: { size: 11 },
+                maxRotation: 45,
+                minRotation: 45
+              },
+              grid: { display: false }
+            }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'index'
+          }
+        }
+      });
+    }
+
+    // Update stats
+    function updateStats(summary) {
+      document.getElementById('avg-mood').textContent = summary.averageMood || '-';
+      document.getElementById('avg-energy').textContent = summary.averageEnergy || '-';
+      document.getElementById('avg-resilience').textContent = summary.averageResilience || '-';
+      
+      const completionRate = summary.totalTasks > 0 
+        ? Math.round((summary.completedTasks / summary.totalTasks) * 100)
+        : 0;
+      
+      document.getElementById('task-completion').textContent = `${completionRate}%`;
+      document.getElementById('task-completion-text').textContent = 
+        `${summary.completedTasks} of ${summary.totalTasks} completed`;
+    }
+
+    // Update insights
+    function updateInsights(metrics) {
+      const container = document.getElementById('insights-container');
+      container.innerHTML = '';
+
+      // Get unique insights from last 10 interactions
+      const recentMetrics = metrics.slice(-10);
+      const allInsights = recentMetrics.flatMap(m => m.insights);
+      
+      if (allInsights.length === 0) {
+        container.innerHTML = `
+          <div class="insight-item">
+            <div class="insight-icon">💡</div>
+            <div class="insight-content">
+              <p>Keep chatting to generate more insights!</p>
+              <small>Your AI companion learns from your conversations</small>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // Display last 6 unique insights
+      const uniqueInsights = [...new Map(allInsights.map(i => [i.text, i])).values()]
+        .slice(-6)
+        .reverse();
+
+      uniqueInsights.forEach(insight => {
+        const item = document.createElement('div');
+        item.className = 'insight-item fade-in';
+        const date = new Date(insight.timestamp);
+        item.innerHTML = `
+          <div class="insight-icon">${insight.icon}</div>
+          <div class="insight-content">
+            <p>${insight.text}</p>
+            <small>${date.toLocaleDateString('en-US', { 
+              month: 'short', 
+              day: 'numeric', 
+              year: 'numeric' 
+            })}</small>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // Display tasks
+    function displayTasks(tasks) {
+      const tasksSection = document.getElementById('tasks-section');
+      const tasksList = document.getElementById('tasks-list');
+      const taskProgress = document.getElementById('task-progress');
+      
+      if (tasks.length === 0) {
+        tasksSection.style.display = 'none';
+        return;
+      }
+      
+      tasksSection.style.display = 'block';
+      
+      const completedCount = tasks.filter(t => t.completed).length;
+      taskProgress.textContent = `(${completedCount}/${tasks.length} completed)`;
+      
+      tasksList.innerHTML = tasks.slice(0, 8).map(task => `
+        <div class="task-item ${task.completed ? 'completed' : ''}" data-task-id="${task.id}">
+          <div class="task-checkbox ${task.completed ? 'checked' : ''}" 
+               onclick="toggleTask('${task.id}', '${task.url}')"></div>
+          <div class="task-text">${task.title}</div>
+          <a href="${task.url}" target="_blank" class="task-link" 
+             onclick="markTaskCompleted('${task.id}')">
+            ${task.type === 'video' ? '▶️' : '📖'} Open
+          </a>
+        </div>
+      `).join('');
+    }
+
+    // Toggle task
+    async function toggleTask(taskId, url) {
+      window.open(url, '_blank');
+      await markTaskCompleted(taskId);
+    }
+
+    // Mark task as completed
+    async function markTaskCompleted(taskId) {
+      try {
+        const response = await fetch(`http://localhost:3001/tasks/${conversationId}/complete`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ taskId })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          console.log('✅ Task completed:', taskId);
+          
+          // Reload dashboard to show updated task status
+          setTimeout(() => {
+            loadDashboardData();
+          }, 500);
+        }
+      } catch (error) {
+        console.error('Failed to mark task as completed:', error);
+      }
+    }
+
+    // Show empty state
+    function showEmptyState() {
+      document.getElementById('avg-mood').textContent = '-';
+      document.getElementById('avg-energy').textContent = '-';
+      document.getElementById('avg-resilience').textContent = '-';
+      document.getElementById('task-completion').textContent = '-';
+      document.getElementById('task-completion-text').textContent = 'No data yet';
+      
+      document.getElementById('insights-container').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">💬</div>
+          <p>Start chatting to see your personalized insights!</p>
+          <button class="btn-primary" onclick="window.location.href='index.html'" 
+                  style="margin-top: 20px; padding: 14px 28px; font-size: 16px; background: var(--primary-green); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600;">
+            Start Chat
+          </button>
+        </div>
+      `;
+    }
+
+    // Refresh dashboard every 30 seconds
+    setInterval(loadDashboardData, 30000);
+
+    // Load on page load
+    loadDashboardData();
+  </script>
+
+</body>
+</html>
