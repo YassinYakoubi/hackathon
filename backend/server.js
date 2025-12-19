@@ -9,9 +9,10 @@ const app = express();
 const PORT = 3001;
 
 // Updated API key
-const OPENROUTER_API_KEY = "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";
+const OPENROUTER_API_KEY = "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";
 
 app.use(cors());
+
 app.use(express.json());
 
 const sentiment = new Sentiment();
