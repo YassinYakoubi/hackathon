@@ -9,7 +9,7 @@ const app = express();
 const PORT = 3001;
 
 // Updated API key
-const OPENROUTER_API_KEY = "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";
+const OPENROUTER_API_KEY = "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";
 
 app.use(cors());
 app.use(express.json());
@@ -19,14 +19,16 @@ const conversations = new Map();
 const userTasks = new Map();
 const dashboardMetrics = new Map();
 
-// Free models list - DeepSeek first
+// Updated FREE models list (verified working on OpenRouter)
 const FREE_MODELS = [
-  "deepseek/deepseek-chat",           // DeepSeek - FREE (first choice)
-  "meta-llama/llama-3.2-3b-instruct", // Llama 3.2 3B
-  "meta-llama/llama-3.1-8b-instruct", // Llama 3.1 8B
-  "google/gemini-flash-1.5",          // Gemini Flash
-  "mistralai/mistral-7b-instruct",    // Mistral 7B
-  "nousresearch/hermes-3-llama-3.1-405b", // Hermes 405B (free tier)
+  "google/gemini-2.0-flash-exp:free",      // Gemini 2.0 Flash - FREE
+  "google/gemini-flash-1.5",               // Gemini 1.5 Flash - FREE
+  "meta-llama/llama-3.2-3b-instruct:free", // Llama 3.2 3B - FREE
+  "meta-llama/llama-3.1-8b-instruct:free", // Llama 3.1 8B - FREE
+  "mistralai/mistral-7b-instruct:free",    // Mistral 7B - FREE
+  "microsoft/phi-3-mini-128k-instruct:free", // Phi-3 Mini - FREE
+  "qwen/qwen-2-7b-instruct:free",          // Qwen 2 7B - FREE
+  "nousresearch/hermes-3-llama-3.1-405b:free", // Hermes 405B - FREE
 ];
 
 // Persona-based system prompts
@@ -81,7 +83,7 @@ Your approach:
 Remember: You're not a therapist. If they mention crisis/self-harm, gently suggest professional help.`
   };
 
-  return prompts[personaId] || `You are a supportive mental wellbeing companion. Be empathetic, non-judgmental, and helpful. Keep responses brief and conversational (2-4 sentences). Focus on ${primaryChallenge.replace('_', ' ')}. You're not a therapist - if someone mentions crisis/self-harm, gently suggest professional help.`;
+  return prompts[personaId] || `You are a supportive mental wellbeing companion. Be empathetic, non-judgmental, and helpful. Keep responses brief and conversational (2-4 sentences). Focus on ${primaryChallenge ? primaryChallenge.replace('_', ' ') : 'general wellbeing'}. You're not a therapist - if someone mentions crisis/self-harm, gently suggest professional help.`;
 }
 
 // Generate realistic fake historical data
@@ -527,7 +529,12 @@ app.post("/tasks/:conversationId/complete", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`\n🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📡 Using API key: ${OPENROUTER_API_KEY.substring(0, 20)}...`);
-  console.log(`🤖 Primary model: ${FREE_MODELS[0]} (DeepSeek)`);
-  console.log(`🔄 Fallback models: ${FREE_MODELS.length - 1} available\n`);
+  console.log(`📡 API Key: ${OPENROUTER_API_KEY.substring(0, 30)}...`);
+  console.log(`🤖 Free models configured: ${FREE_MODELS.length}`);
+  console.log(`🎯 Primary model: ${FREE_MODELS[0]}`);
+  console.log(`\n💡 Available endpoints:`);
+  console.log(`   POST /chat - Send messages`);
+  console.log(`   GET  /dashboard/:id - Get metrics`);
+  console.log(`   GET  /tasks/:id - Get tasks`);
+  console.log(`   POST /tasks/:id/complete - Mark task done\n`);
 });

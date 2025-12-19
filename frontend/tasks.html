@@ -1,3 +1,4 @@
+/* filepath: /home/jackoby/Desktop/hackathon/frontend/tasks.html */
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,282 +9,303 @@
   <link rel="stylesheet" href="navbar.css">
   <style>
     body {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      min-height: 100vh;
       padding: 0;
       margin: 0;
     }
 
     .page-content {
       padding-top: 100px;
-      padding-left: 20px;
-      padding-right: 20px;
-      padding-bottom: 20px;
+      padding-bottom: 60px;
     }
 
-    .container {
+    .tasks-container {
       max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .tasks-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .tasks-header h1 {
+      font-size: 48px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+    }
+
+    .tasks-header p {
+      font-size: 18px;
+      color: var(--text-medium);
+      max-width: 600px;
       margin: 0 auto;
     }
 
-    .page-header {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 24px;
-      border: 1px solid rgba(70, 196, 126, 0.1);
-      box-shadow: var(--shadow-lg);
-      padding: 30px;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .page-header h1 {
-      font-size: 32px;
-      color: var(--text-dark);
-      margin-bottom: 10px;
-    }
-
-    .page-header p {
-      color: var(--text-medium);
-      font-size: 16px;
-    }
-
-    .stats-bar {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      border: 1px solid rgba(70, 196, 126, 0.1);
-      box-shadow: var(--shadow-md);
-      padding: 25px;
-      margin-bottom: 25px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 25px;
-    }
-
-    .stat-item {
-      text-align: center;
-      padding: 15px;
-      background: linear-gradient(135deg, rgba(70, 196, 126, 0.05) 0%, rgba(58, 166, 105, 0.05) 100%);
-      border-radius: 16px;
-    }
-
-    .stat-value {
-      font-size: 36px;
-      font-weight: 700;
-      color: var(--primary-green);
-      margin-bottom: 5px;
-    }
-
-    .stat-label {
-      font-size: 14px;
-      color: var(--text-medium);
-      font-weight: 600;
-    }
-
-    .filter-section {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
-      border: 1px solid rgba(70, 196, 126, 0.1);
-      padding: 20px;
-      margin-bottom: 25px;
+    .filter-tabs {
       display: flex;
       gap: 12px;
-      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
       flex-wrap: wrap;
     }
 
-    .filter-label {
-      font-weight: 700;
-      color: var(--text-dark);
-      font-size: 15px;
-    }
-
-    .filter-btn {
-      padding: 10px 20px;
-      background: transparent;
+    .filter-tab {
+      padding: 12px 28px;
+      background: rgba(255, 255, 255, 0.8);
       border: 2px solid rgba(70, 196, 126, 0.2);
-      border-radius: 10px;
-      color: var(--text-medium);
+      border-radius: 12px;
+      font-size: 15px;
       font-weight: 600;
+      color: var(--text-dark);
       cursor: pointer;
-      transition: all 0.3s;
-      font-size: 14px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .filter-btn.active {
-      background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
-      border-color: var(--primary-green);
-      color: white;
-      box-shadow: 0 4px 12px rgba(70, 196, 126, 0.3);
-    }
-
-    .filter-btn:hover:not(.active) {
+    .filter-tab:hover {
+      background: rgba(70, 196, 126, 0.1);
       border-color: var(--primary-green);
       transform: translateY(-2px);
     }
 
+    .filter-tab.active {
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-dark));
+      color: white;
+      border-color: var(--primary-green);
+      box-shadow: 0 4px 16px rgba(70, 196, 126, 0.3);
+    }
+
     .tasks-grid {
       display: grid;
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
     }
 
     .task-card {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
       border-radius: 20px;
+      padding: 28px;
       border: 2px solid rgba(70, 196, 126, 0.2);
-      box-shadow: var(--shadow-md);
-      padding: 25px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .task-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(70, 196, 126, 0.2);
       border-color: var(--primary-green);
     }
 
     .task-card.completed {
-      opacity: 0.8;
-      border-color: rgba(70, 196, 126, 0.5);
-      background: rgba(70, 196, 126, 0.03);
+      opacity: 0.85;
+      background: rgba(247, 250, 252, 0.95);
     }
 
-    .task-header {
+    .task-card-header {
       display: flex;
       justify-content: space-between;
-      align-items: start;
-      margin-bottom: 15px;
-    }
-
-    .task-type {
-      display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: linear-gradient(135deg, rgba(70, 196, 126, 0.15) 0%, rgba(58, 166, 105, 0.15) 100%);
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--primary-green);
+      margin-bottom: 16px;
+      gap: 10px;
     }
 
-    .task-type.video {
-      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%);
-      color: #dc2626;
-    }
-
-    .task-type.article {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.15) 100%);
-      color: #2563eb;
-    }
-
-    .task-duration {
-      font-size: 13px;
-      color: var(--text-medium);
-      font-weight: 600;
-      padding: 6px 12px;
-      background: rgba(107, 114, 128, 0.1);
+    .task-type-badge {
+      padding: 6px 14px;
       border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .task-type-badge.video {
+      background: rgba(239, 68, 68, 0.1);
+      color: #dc2626;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .task-type-badge.article {
+      background: rgba(59, 130, 246, 0.1);
+      color: #2563eb;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .task-completed-badge {
+      padding: 6px 12px;
+      background: rgba(70, 196, 126, 0.1);
+      color: var(--primary-green);
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid rgba(70, 196, 126, 0.3);
     }
 
     .task-title {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
       color: var(--text-dark);
       margin-bottom: 12px;
       line-height: 1.4;
     }
 
-    .task-description {
+    .task-completed-date {
+      font-size: 13px;
       color: var(--text-medium);
-      font-size: 15px;
-      line-height: 1.6;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      font-style: italic;
     }
 
     .task-actions {
       display: flex;
-      gap: 12px;
-      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    .btn-task {
+    .task-action-btn {
       flex: 1;
-      padding: 14px 24px;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 600;
+      min-width: 120px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.3s ease;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      border: 2px solid transparent;
     }
 
-    .btn-start {
-      background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+    .task-action-btn.primary {
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-dark));
       color: white;
+      border-color: var(--primary-green);
       box-shadow: 0 4px 12px rgba(70, 196, 126, 0.3);
     }
 
-    .btn-start:hover {
+    .task-action-btn.primary:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(70, 196, 126, 0.4);
     }
 
-    .btn-completed {
-      background: rgba(70, 196, 126, 0.1);
-      color: var(--primary-green);
-      border: 2px solid var(--primary-green);
-      cursor: default;
+    .task-action-btn.secondary {
+      background: rgba(107, 114, 128, 0.1);
+      color: var(--text-dark);
+      border-color: rgba(107, 114, 128, 0.2);
     }
 
-    .completion-badge {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
-      color: white;
-      padding: 10px 18px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 16px rgba(70, 196, 126, 0.4);
+    .task-action-btn.secondary:hover {
+      background: rgba(107, 114, 128, 0.2);
+      transform: translateY(-2px);
     }
 
     .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px;
       text-align: center;
-      padding: 80px 30px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.8);
       border-radius: 24px;
       border: 2px dashed rgba(70, 196, 126, 0.3);
+      margin: 40px 0;
     }
 
     .empty-state-icon {
       font-size: 80px;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
+      opacity: 0.8;
     }
 
     .empty-state h3 {
       font-size: 28px;
+      font-weight: 700;
       color: var(--text-dark);
       margin-bottom: 12px;
     }
 
     .empty-state p {
-      color: var(--text-medium);
       font-size: 16px;
+      color: var(--text-medium);
+      max-width: 400px;
       line-height: 1.6;
-      margin-bottom: 30px;
+    }
+
+    .btn-primary {
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 16px rgba(70, 196, 126, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 24px rgba(70, 196, 126, 0.4);
+    }
+
+    .home-redirect-container {
+      max-width: 1000px;
+      margin: 60px auto 40px;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .home-redirect-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 40px;
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(70, 196, 126, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .home-redirect-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(70, 196, 126, 0.4);
+    }
+
+    .home-redirect-button:active {
+      transform: translateY(-1px);
+    }
+
+    .home-redirect-text {
+      font-size: 14px;
+      color: #6b7280;
+      margin-top: 15px;
+      font-weight: 500;
     }
 
     @media (max-width: 768px) {
@@ -291,16 +313,33 @@
         padding-top: 80px;
       }
 
-      .stats-bar {
+      .tasks-header h1 {
+        font-size: 36px;
+      }
+
+      .tasks-header p {
+        font-size: 16px;
+      }
+
+      .tasks-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
       }
 
-      .filter-section {
+      .filter-tabs {
+        padding: 0 10px;
+      }
+
+      .filter-tab {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+
+      .task-actions {
         flex-direction: column;
-        align-items: stretch;
       }
 
-      .filter-btn {
+      .task-action-btn {
         width: 100%;
       }
     }
@@ -309,131 +348,188 @@
 <body data-page="tasks">
 
   <div class="page-content">
-    <div class="container">
-      <div class="page-header fade-in">
+    <div class="tasks-container">
+      <!-- Tasks Header -->
+      <div class="tasks-header">
         <h1>📚 Your Wellbeing Tasks</h1>
-        <p>Personalized resources to support your mental health journey</p>
+        <p>Complete these personalized activities to support your mental health journey</p>
       </div>
 
-      <div class="stats-bar fade-in" style="animation-delay: 0.1s;">
-        <div class="stat-item">
-          <div class="stat-value" id="total-tasks">0</div>
-          <div class="stat-label">Total Tasks</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value" id="completed-tasks">0</div>
-          <div class="stat-label">Completed</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value" id="completion-rate">0%</div>
-          <div class="stat-label">Completion Rate</div>
-        </div>
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all" onclick="filterTasks('all')">
+          All Tasks
+        </button>
+        <button class="filter-tab" data-filter="pending" onclick="filterTasks('pending')">
+          Pending
+        </button>
+        <button class="filter-tab" data-filter="completed" onclick="filterTasks('completed')">
+          Completed
+        </button>
       </div>
 
-      <div class="filter-section fade-in" style="animation-delay: 0.2s;">
-        <span class="filter-label">Filter:</span>
-        <button class="filter-btn active" onclick="filterTasks('all')">All Tasks</button>
-        <button class="filter-btn" onclick="filterTasks('video')">📹 Videos</button>
-        <button class="filter-btn" onclick="filterTasks('article')">📄 Articles</button>
-        <button class="filter-btn" onclick="filterTasks('pending')">⏳ Pending</button>
-        <button class="filter-btn" onclick="filterTasks('completed')">✅ Completed</button>
+      <!-- Tasks Grid -->
+      <div class="tasks-grid" id="tasksGrid">
+        <!-- Tasks will be loaded here -->
       </div>
 
-      <div id="tasks-container">
-
-        <div class="empty-state">
-          <div class="empty-state-icon">📝</div>
-          <h3>Loading your tasks...</h3>
-          <p>Please wait while we fetch your personalized resources</p>
-        </div>
+      <!-- Empty State -->
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-state-icon">📭</div>
+        <h3>No tasks yet!</h3>
+        <p>Start chatting with your AI companion to receive personalized task recommendations.</p>
+        <a href="chat.html" class="btn-primary" style="margin-top: 20px; text-decoration: none; display: inline-block;">
+          Start Chatting
+        </a>
       </div>
+    </div>
+
+    <!-- Home Redirect Button -->
+    <div class="home-redirect-container">
+      <a href="/bruh/dist/index.html" class="home-redirect-button">
+        <span>🎮</span>
+        <span>Play a Game</span>
+      </a>
+      <p class="home-redirect-text">
+        Return to the main page to explore more features
+      </p>
     </div>
   </div>
 
   <script src="navbar.js"></script>
   <script>
+    const conversationId = "main";
     let allTasks = [];
     let currentFilter = 'all';
 
-    // Load tasks from localStorage
-    function loadTasks() {
+    // Load tasks from backend
+    async function loadTasks() {
       try {
-        allTasks = JSON.parse(localStorage.getItem('userTasks') || '[]');
-        console.log('✅ Loaded tasks from localStorage:', allTasks.length);
+        const response = await fetch(`http://localhost:3001/tasks/${conversationId}`);
+        const data = await response.json();
         
-        if (allTasks.length === 0) {
-          showEmptyState('no-tasks');
-        } else {
-          renderTasks();
-          updateStats();
-        }
+        allTasks = data.tasks || [];
+        console.log(`📋 Loaded ${allTasks.length} tasks`);
+        
+        renderTasks();
         
       } catch (error) {
         console.error('❌ Failed to load tasks:', error);
-        showEmptyState('error');
+        document.getElementById('emptyState').style.display = 'flex';
       }
     }
 
+    // Render tasks based on current filter
     function renderTasks() {
-      const container = document.getElementById('tasks-container');
+      const grid = document.getElementById('tasksGrid');
+      const emptyState = document.getElementById('emptyState');
       
       let filteredTasks = allTasks;
-      if (currentFilter === 'video') {
-        filteredTasks = allTasks.filter(t => t.type === 'video');
-      } else if (currentFilter === 'article') {
-        filteredTasks = allTasks.filter(t => t.type === 'article');
-      } else if (currentFilter === 'pending') {
+      
+      if (currentFilter === 'pending') {
         filteredTasks = allTasks.filter(t => !t.completed);
       } else if (currentFilter === 'completed') {
         filteredTasks = allTasks.filter(t => t.completed);
       }
       
       if (filteredTasks.length === 0) {
-        showEmptyState('no-filtered');
+        grid.style.display = 'none';
+        emptyState.style.display = 'flex';
+        
+        if (currentFilter === 'completed' && allTasks.length > 0) {
+          emptyState.innerHTML = `
+            <div class="empty-state-icon">🎯</div>
+            <h3>No completed tasks yet</h3>
+            <p>Start completing tasks to see them here!</p>
+          `;
+        } else if (currentFilter === 'pending' && allTasks.length > 0) {
+          emptyState.innerHTML = `
+            <div class="empty-state-icon">✅</div>
+            <h3>All tasks completed!</h3>
+            <p>Great work! Check back later for more recommendations.</p>
+          `;
+        }
         return;
       }
       
-      container.innerHTML = `
-        <div class="tasks-grid">
-          ${filteredTasks.map((task, index) => `
-            <div class="task-card fade-in ${task.completed ? 'completed' : ''}" 
-                 style="animation-delay: ${index * 0.05}s;"
-                 data-task-id="${task.id}">
-              ${task.completed ? '<div class="completion-badge">✓ Completed</div>' : ''}
-              
-              <div class="task-header">
-                <span class="task-type ${task.type}">
-                  ${task.type === 'video' ? '📹' : '📄'} ${task.type}
-                </span>
-                <span class="task-duration">${task.duration}</span>
+      grid.style.display = 'grid';
+      emptyState.style.display = 'none';
+      
+      grid.innerHTML = filteredTasks.map(task => {
+        const completedDate = task.completedAt 
+          ? new Date(task.completedAt).toLocaleDateString('en-US', { 
+              month: 'short', 
+              day: 'numeric',
+              year: 'numeric'
+            })
+          : '';
+        
+        return `
+          <div class="task-card ${task.completed ? 'completed' : ''}" data-task-id="${task.id}">
+            <div class="task-card-header">
+              <div class="task-type-badge ${task.type}">
+                ${task.type === 'video' ? '▶️ Video' : '📖 Article'}
               </div>
-              
-              <h3 class="task-title">${task.title}</h3>
-              <p class="task-description">${task.description}</p>
-              
-              <div class="task-actions">
-                ${task.completed ? 
-                  `<button class="btn-task btn-completed">
-                    ✓ Completed ${task.completedAt ? new Date(task.completedAt).toLocaleDateString() : ''}
-                   </button>` :
-                  `<button class="btn-task btn-start" onclick="startTask('${task.id}', '${task.url}')">
-                    ${task.type === 'video' ? '▶️ Watch Now' : '📖 Read Now'}
-                  </button>`
-                }
-              </div>
+              ${task.completed ? `
+                <div class="task-completed-badge">
+                  ✓ Completed
+                </div>
+              ` : ''}
             </div>
-          `).join('')}
-        </div>
-      `;
+            
+            <h3 class="task-title">${task.title}</h3>
+            
+            ${task.completed && completedDate ? `
+              <p class="task-completed-date">Completed on ${completedDate}</p>
+            ` : ''}
+            
+            <div class="task-actions">
+              ${!task.completed ? `
+                <button class="task-action-btn primary" onclick="openAndComplete('${task.id}', '${task.url}')">
+                  ${task.type === 'video' ? '▶️' : '📖'} Start Task
+                </button>
+              ` : `
+                <a href="${task.url}" target="_blank" class="task-action-btn secondary">
+                  View Again
+                </a>
+              `}
+              
+              ${!task.completed ? `
+                <button class="task-action-btn secondary" onclick="markComplete('${task.id}')">
+                  Mark Complete
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
-    async function startTask(taskId, url) {
-      // Open the resource
-      window.open(url, '_blank');
+    // Filter tasks
+    function filterTasks(filter) {
+      currentFilter = filter;
       
-      // Mark as completed
+      // Update active tab
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.filter === filter) {
+          tab.classList.add('active');
+        }
+      });
+      
+      renderTasks();
+    }
+
+    // Open task and mark as complete
+    async function openAndComplete(taskId, url) {
+      window.open(url, '_blank');
+      await markComplete(taskId);
+    }
+
+    // Mark task as complete
+    async function markComplete(taskId) {
       try {
-        const response = await fetch(`http://localhost:3001/tasks/main/complete`, {
+        const response = await fetch(`http://localhost:3001/tasks/${conversationId}/complete`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ taskId })
@@ -444,132 +540,80 @@
         if (data.success) {
           console.log('✅ Task completed:', taskId);
           
-          // Update local state
+          // Update local task
           const task = allTasks.find(t => t.id === taskId);
           if (task) {
             task.completed = true;
             task.completedAt = new Date().toISOString();
           }
           
-          // Re-render
+          // Re-render with animation
           renderTasks();
-          updateStats();
           
           // Show success message
-          showNotification('🎉 Great job! Task completed and synced to dashboard.');
+          showToast('Task completed! Great work! 🎉');
         }
       } catch (error) {
-        console.error('❌ Failed to mark task as completed:', error);
-        showNotification('❌ Failed to sync. Please check your connection.');
+        console.error('Failed to mark task as completed:', error);
+        showToast('Failed to mark task as complete. Please try again.', 'error');
       }
     }
 
-    function saveCompletedTask(task) {
-      try {
-        let dashboardData = JSON.parse(localStorage.getItem('dashboardData') || '{"insights": []}');
-        
-        if (!dashboardData.insights) {
-          dashboardData.insights = [];
-        }
-        
-        dashboardData.insights.push({
-          icon: task.type === 'video' ? '📹' : '📄',
-          text: `Completed: ${task.title}`,
-          timestamp: new Date().toISOString(),
-          taskId: task.id
-        });
-        
-        localStorage.setItem('dashboardData', JSON.stringify(dashboardData));
-        console.log('💾 Saved completed task to dashboard');
-      } catch (error) {
-        console.error('Failed to save to dashboard:', error);
-      }
-    }
-
-    function updateStats() {
-      const total = allTasks.length;
-      const completed = allTasks.filter(t => t.completed).length;
-      const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
-      
-      document.getElementById('total-tasks').textContent = total;
-      document.getElementById('completed-tasks').textContent = completed;
-      document.getElementById('completion-rate').textContent = `${rate}%`;
-    }
-
-    function filterTasks(filter) {
-      currentFilter = filter;
-      
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      event.target.classList.add('active');
-      
-      renderTasks();
-    }
-
-    function showEmptyState(type) {
-      const container = document.getElementById('tasks-container');
-      
-      if (type === 'no-tasks') {
-        container.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-state-icon">💬</div>
-            <h3>No tasks yet</h3>
-            <p>Start chatting with your AI companion to receive personalized wellbeing resources!</p>
-            <button class="btn-primary" onclick="window.location.href='index.html'" 
-                    style="padding: 15px 30px; font-size: 16px; margin-top: 10px;">
-              Start Chat
-            </button>
-          </div>
-        `;
-      } else if (type === 'no-filtered') {
-        container.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-state-icon">🔍</div>
-            <h3>No tasks match this filter</h3>
-            <p>Try selecting a different filter option</p>
-          </div>
-        `;
-      } else if (type === 'error') {
-        container.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-state-icon">❌</div>
-            <h3>Failed to load tasks</h3>
-            <p>There was an error loading your tasks</p>
-            <button class="btn-primary" onclick="loadTasks()" 
-                    style="padding: 15px 30px; font-size: 16px; margin-top: 10px;">
-              Retry
-            </button>
-          </div>
-        `;
-      }
-    }
-
-    function showNotification(message) {
-      const notification = document.createElement('div');
-      notification.style.cssText = `
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      toast.style.cssText = `
         position: fixed;
-        top: 100px;
-        right: 20px;
-        background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+        bottom: 30px;
+        right: 30px;
+        background: ${type === 'success' ? 'var(--primary-green)' : '#ef4444'};
         color: white;
-        padding: 18px 26px;
-        border-radius: 14px;
-        box-shadow: 0 8px 28px rgba(70, 196, 126, 0.4);
-        z-index: 1000;
-        animation: slideIn 0.4s ease;
+        padding: 16px 24px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
         font-weight: 600;
-        font-size: 15px;
       `;
-      notification.textContent = message;
-      document.body.appendChild(notification);
+      
+      document.body.appendChild(toast);
       
       setTimeout(() => {
-        notification.style.animation = 'slideOut 0.4s ease';
-        setTimeout(() => notification.remove(), 400);
+        toast.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
       }, 3000);
     }
 
+    // Add toast animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      
+      @keyframes slideOut {
+        from {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Load tasks on page load
     loadTasks();
   </script>
 

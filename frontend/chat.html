@@ -54,7 +54,6 @@
       background: white;
       border-radius: 50%;
       box-shadow: 0 4px 16px rgba(70, 196, 126, 0.2);
-      background-image: url(icon.jpeg) no-repeat center;
     }
 
     .chat-header-content h1 {
@@ -235,23 +234,31 @@
     const inputEl = document.getElementById("userInput");
     const sendBtn = document.getElementById("sendBtn");
 
-    // Load user profile
+    // Load user profile from localStorage (NOT sessionStorage)
     let userProfile = null;
     try {
-      const stored = sessionStorage.getItem('userProfile');
+      const stored = localStorage.getItem('userProfile');
       if (stored) {
         userProfile = JSON.parse(stored);
         console.log('✅ Loaded user profile:', userProfile);
         
-        // Update UI with persona
-        if (userProfile.persona) {
-          document.getElementById('persona-icon').textContent = userProfile.persona.emoji;
-          document.getElementById('persona-name').textContent = userProfile.persona.name;
-          document.getElementById('persona-desc').textContent = userProfile.persona.tagline;
-        }
-      } else {
-        // Redirect to quiz if no profile
-        window.location.href = 'quiz.html';
+        // Map quiz results to persona display
+        const personaMap = {
+          'The Overthinker': { emoji: '😰', name: 'The Overthinker', tagline: 'Here to help calm your racing thoughts' },
+          'The Heavy Heart': { emoji: '💙', name: 'The Heavy Heart', tagline: 'Here to lift your spirits gently' },
+          'The Exhausted Achiever': { emoji: '😓', name: 'The Exhausted Achiever', tagline: 'Here to help you recharge and reset' },
+          'The Scattered Mind': { emoji: '🌪️', name: 'The Scattered Mind', tagline: 'Here to help you focus and organize' }
+        };
+        
+        const persona = personaMap[userProfile.personaId] || {
+          emoji: '💚',
+          name: 'AI Companion',
+          tagline: 'Here to support your wellbeing journey'
+        };
+        
+        document.getElementById('persona-icon').textContent = persona.emoji;
+        document.getElementById('persona-name').textContent = persona.name;
+        document.getElementById('persona-desc').textContent = persona.tagline;
       }
     } catch (e) {
       console.error('Failed to load user profile:', e);
@@ -381,7 +388,7 @@
         const data = await res.json();
         if (data.reply) {
           const modelInfo = data.model ? `<div class="modelInfo">via ${data.model}</div>` : '';
-          const personaName = userProfile?.persona.name || "AI Companion";
+          const personaName = userProfile?.personaId || "AI Companion";
           addMessage(personaName, data.reply + modelInfo, "ai");
           
           if (data.dashboardMetrics) {
@@ -447,12 +454,13 @@
     loadChatHistory();
 
     // Add welcome message if no history
-    if (messagesEl.children.length === 0 && userProfile) {
-      addMessage(
-        userProfile.persona.name,
-        `Hi! I'm ${userProfile.persona.name}. ${userProfile.persona.tagline}`,
-        "ai"
-      );
+    if (messagesEl.children.length === 0) {
+      const welcomeName = userProfile?.personaId || "AI Companion";
+      const welcomeMsg = userProfile 
+        ? `Hi! I'm here to help with your ${userProfile.primaryChallenge.replace('_', ' ')}. How are you feeling today?`
+        : "Hi! I'm your AI wellbeing companion. How can I support you today?";
+      
+      addMessage(welcomeName, welcomeMsg, "ai");
     }
   </script>
 

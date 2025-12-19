@@ -1,0 +1,109 @@
+const QUIZ_QUESTIONS = [
+  // ANXIETY (5)
+  {
+    id: 1,
+    text: "I feel tense, on edge, or physically restless.",
+    dimension: "anxiety",
+  },
+  {
+    id: 2,
+    text: "My mind keeps worrying about things even when I try to relax.",
+    dimension: "anxiety",
+  },
+  {
+    id: 3,
+    text: "I notice physical signs of stress (fast heartbeat, tight chest, shallow breathing).",
+    dimension: "anxiety",
+  },
+  {
+    id: 4,
+    text: "Small problems quickly make me feel overwhelmed.",
+    dimension: "anxiety",
+  },
+  {
+    id: 5,
+    text: "I often imagine worst-case scenarios.",
+    dimension: "anxiety",
+  },
+
+  // LOW MOOD (5)
+  {
+    id: 6,
+    text: "I feel down, sad, or emotionally flat.",
+    dimension: "low_mood",
+  },
+  {
+    id: 7,
+    text: "Things that used to interest me feel “meh” or pointless.",
+    dimension: "low_mood",
+  },
+  {
+    id: 8,
+    text: "It is hard to feel motivated to start even small activities.",
+    dimension: "low_mood",
+  },
+  {
+    id: 9,
+    text: "I often feel tired, even if I haven't done much.",
+    dimension: "low_mood",
+  },
+  {
+    id: 10,
+    text: "I find it hard to feel hopeful about the near future.",
+    dimension: "low_mood",
+  },
+
+  // BURNOUT (5)
+  {
+    id: 11,
+    text: "I feel emotionally or mentally exhausted by my responsibilities (work, school, family, etc.).",
+    dimension: "burnout",
+  },
+  {
+    id: 12,
+    text: "Even simple tasks feel like they require too much energy.",
+    dimension: "burnout",
+  },
+  {
+    id: 13,
+    text: "I often feel like I have to keep going, even when I'm drained.",
+    dimension: "burnout",
+  },
+  {
+    id: 14,
+    text: "I don’t have much energy left for things I enjoy.",
+    dimension: "burnout",
+  },
+  {
+    id: 15,
+    text: "I feel like I'm running on autopilot or just surviving the day.",
+    dimension: "burnout",
+  },
+
+  // FOCUS DIFFICULTIES (5)
+  {
+    id: 16,
+    text: "It’s hard to concentrate on a task without getting distracted.",
+    dimension: "focus_difficulties",
+  },
+  {
+    id: 17,
+    text: "I struggle to start tasks, even when I know exactly what I should do.",
+    dimension: "focus_difficulties",
+  },
+  {
+    id: 18,
+    text: "I often jump between tasks without finishing them.",
+    dimension: "focus_difficulties",
+  },
+  {
+    id: 19,
+    text: "I have trouble organizing my day or prioritizing what to do first.",
+    dimension: "focus_difficulties",
+  },
+  {
+    id: 20,
+    text: "Deadlines or big tasks often make me freeze instead of taking action.",
+    dimension: "focus_difficulties",
+  },
+];

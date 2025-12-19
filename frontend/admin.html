@@ -1,0 +1,784 @@
+/* filepath: /home/jackoby/Desktop/hackathon/frontend/admin.html */
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Wellbeing Companion</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="navbar.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+      color: white;
+    }
+
+    .page-content {
+      padding-top: 100px;
+      padding-bottom: 60px;
+    }
+
+    .admin-container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .admin-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .admin-header h1 {
+      font-size: 42px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .admin-header p {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .login-card, .admin-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      margin-bottom: 30px;
+    }
+
+    .login-card h2, .admin-card h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: rgba(255, 255, 255, 0.9);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: white;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s;
+      box-sizing: border-box;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #ef4444;
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 6px;
+    }
+
+    .btn {
+      padding: 14px 32px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+      width: 100%;
+    }
+
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(245, 158, 11, 0.4);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+      color: white;
+      box-shadow: 0 4px 16px rgba(70, 196, 126, 0.3);
+      width: 100%;
+    }
+
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(70, 196, 126, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      width: 100%;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .alert {
+      padding: 14px 18px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    .alert-success {
+      background: rgba(70, 196, 126, 0.15);
+      border: 1px solid rgba(70, 196, 126, 0.3);
+      color: #86efac;
+    }
+
+    .alert-info {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #93c5fd;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: #ef4444;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 30px 0;
+    }
+
+    #adminPanel {
+      display: none;
+    }
+
+    .logout-btn {
+      position: fixed;
+      top: 120px;
+      right: 20px;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .model-list {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 15px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .model-item {
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .model-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .model-remove-btn {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .model-remove-btn:hover {
+      background: rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .page-content {
+        padding-top: 80px;
+      }
+
+      .admin-header h1 {
+        font-size: 32px;
+      }
+
+      .login-card, .admin-card {
+        padding: 30px 20px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .logout-btn {
+        top: 80px;
+        right: 10px;
+      }
+
+      .btn-group {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body data-page="admin">
+
+  <div class="page-content">
+    <div class="admin-container">
+      
+      <!-- Login Form -->
+      <div id="loginForm">
+        <div class="admin-header">
+          <h1>🔐 Admin Panel</h1>
+          <p>Authorized access only</p>
+        </div>
+
+        <div class="login-card">
+          <h2>Login</h2>
+          <div id="loginError" style="display: none;"></div>
+          
+          <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+              <label class="form-label" for="password">Password</label>
+              <input 
+                type="password" 
+                id="password" 
+                class="form-input" 
+                placeholder="Enter admin password"
+                required
+                autocomplete="off"
+              />
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+              🔓 Login
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Admin Panel -->
+      <div id="adminPanel">
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+
+        <div class="admin-header">
+          <h1>⚙️ Admin Dashboard</h1>
+          <p>Manage your Wellbeing Companion settings</p>
+        </div>
+
+        <!-- Statistics -->
+        <div class="admin-card">
+          <h2>📊 Statistics</h2>
+          <div class="stats-grid" id="statsGrid">
+            <!-- Stats will be loaded here -->
+          </div>
+        </div>
+
+        <!-- API Key Management -->
+        <div class="admin-card">
+          <h2>🔑 API Key Management</h2>
+          <div id="apiKeyMessage" style="display: none;"></div>
+          
+          <div class="form-group">
+            <label class="form-label" for="apiKey">OpenRouter API Key</label>
+            <textarea 
+              id="apiKey" 
+              class="form-textarea"
+              placeholder="sk-or-v1-..."
+              rows="3"
+            ></textarea>
+            <div class="form-hint">⚠️ Warning: Changing the API key requires backend restart</div>
+          </div>
+          
+          <button onclick="updateApiKey()" class="btn btn-success">
+            💾 Update API Key
+          </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Model List Management -->
+        <div class="admin-card">
+          <h2>🤖 AI Model Configuration</h2>
+          <div id="modelMessage" style="display: none;"></div>
+          
+          <div class="alert alert-info" style="margin-bottom: 20px;">
+            <strong>ℹ️ Current Models:</strong> These are the free AI models used for chat responses.
+          </div>
+
+          <div class="model-list" id="modelList">
+            <!-- Model list will be loaded here -->
+          </div>
+
+          <div class="form-group" style="margin-top: 20px;">
+            <label class="form-label" for="newModel">Add New Model</label>
+            <input 
+              type="text" 
+              id="newModel" 
+              class="form-input"
+              placeholder="e.g., google/gemini-2.0-flash-exp:free"
+            />
+            <div class="form-hint">💡 Format: provider/model-name:free</div>
+          </div>
+
+          <div class="btn-group">
+            <button onclick="addModel()" class="btn btn-success">
+              ➕ Add Model
+            </button>
+            <button onclick="resetModelsToDefault()" class="btn btn-secondary">
+              🔄 Reset to Default
+            </button>
+          </div>
+
+          <div class="form-hint" style="margin-top: 20px; text-align: center;">
+            ⚠️ Changes require backend restart to take effect
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Reset Local Storage -->
+        <div class="admin-card">
+          <h2>🗑️ Reset Local Data</h2>
+          <div id="resetMessage" style="display: none;"></div>
+          
+          <div class="alert alert-info">
+            <strong>ℹ️ Info:</strong> This will clear all local data including:
+            <ul style="margin: 10px 0 0 20px; padding: 0;">
+              <li>Chat history</li>
+              <li>User profile</li>
+              <li>Dashboard metrics</li>
+              <li>Tasks</li>
+            </ul>
+          </div>
+          
+          <button onclick="confirmReset()" class="btn btn-danger">
+            🔥 Reset All Local Storage
+          </button>
+        </div>
+
+        <!-- Backend Status -->
+        <div class="admin-card">
+          <h2>🖥️ Backend Status</h2>
+          <div id="backendStatus">
+            <div class="alert alert-info">
+              Checking backend connection...
+            </div>
+          </div>
+          <button onclick="checkBackendStatus()" class="btn btn-secondary">
+            🔄 Check Status
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="navbar.js"></script>
+  <script>
+    const ADMIN_PASSWORD = "1234";
+    const API_URL = "http://localhost:3001";
+
+    // Default model list
+    const DEFAULT_MODELS = [
+      "google/gemini-2.0-flash-exp:free",
+      "google/gemini-flash-1.5",
+      "meta-llama/llama-3.2-3b-instruct:free",
+      "meta-llama/llama-3.1-8b-instruct:free",
+      "mistralai/mistral-7b-instruct:free",
+      "microsoft/phi-3-mini-128k-instruct:free",
+      "qwen/qwen-2-7b-instruct:free",
+      "nousresearch/hermes-3-llama-3.1-405b:free"
+    ];
+
+    // Check if already logged in
+    if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+      showAdminPanel();
+    }
+
+    // Handle login
+    function handleLogin(event) {
+      event.preventDefault();
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('loginError');
+
+      if (password === ADMIN_PASSWORD) {
+        sessionStorage.setItem('adminLoggedIn', 'true');
+        showAdminPanel();
+        showMessage('loginError', 'Login successful! 🎉', 'success');
+        setTimeout(() => {
+          document.getElementById('loginForm').style.display = 'none';
+        }, 1000);
+      } else {
+        showMessage('loginError', '❌ Invalid password. Please try again.', 'error');
+        document.getElementById('password').value = '';
+      }
+    }
+
+    // Show admin panel
+    function showAdminPanel() {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+      loadStats();
+      checkBackendStatus();
+      loadCurrentApiKey();
+      loadModelList();
+    }
+
+    // Logout
+    function logout() {
+      sessionStorage.removeItem('adminLoggedIn');
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('adminPanel').style.display = 'none';
+      document.getElementById('password').value = '';
+      showMessage('loginError', 'Logged out successfully.', 'success');
+    }
+
+    // Load statistics
+    function loadStats() {
+      const chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+      const dashboardData = JSON.parse(localStorage.getItem('dashboardData') || '{}');
+      const userTasks = JSON.parse(localStorage.getItem('userTasks') || '[]');
+      const userProfile = JSON.parse(localStorage.getItem('userProfile') || 'null');
+      const customModels = JSON.parse(localStorage.getItem('customModels') || 'null');
+
+      const stats = [
+        { label: 'Chat Messages', value: chatHistory.length },
+        { label: 'Dashboard Points', value: dashboardData.moodScores?.length || 0 },
+        { label: 'Total Tasks', value: userTasks.length },
+        { label: 'Completed Tasks', value: userTasks.filter(t => t.completed).length },
+        { label: 'User Profile', value: userProfile ? '✓' : '✗' },
+        { label: 'Custom Models', value: customModels ? '✓' : '✗' }
+      ];
+
+      document.getElementById('statsGrid').innerHTML = stats.map(stat => `
+        <div class="stat-card">
+          <div class="stat-value">${stat.value}</div>
+          <div class="stat-label">${stat.label}</div>
+        </div>
+      `).join('');
+    }
+
+    // Load current API key
+    function loadCurrentApiKey() {
+      const savedKey = localStorage.getItem('customApiKey');
+      if (savedKey) {
+        document.getElementById('apiKey').value = savedKey;
+      } else {
+        document.getElementById('apiKey').placeholder = 'Current: Using default API key\n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';
+      }
+    }
+
+    // Update API key
+    function updateApiKey() {
+      const apiKey = document.getElementById('apiKey').value.trim();
+      
+      if (!apiKey) {
+        showMessage('apiKeyMessage', '⚠️ Please enter an API key.', 'error');
+        return;
+      }
+
+      if (!apiKey.startsWith('sk-or-v1-')) {
+        showMessage('apiKeyMessage', '⚠️ Invalid API key format. Must start with sk-or-v1-', 'error');
+        return;
+      }
+
+      localStorage.setItem('customApiKey', apiKey);
+      
+      showMessage('apiKeyMessage', '✅ API key saved to localStorage! Note: You need to manually update the backend server.js file and restart the server.', 'success');
+      
+      setTimeout(() => {
+        const instructions = document.createElement('div');
+        instructions.className = 'alert alert-info';
+        instructions.innerHTML = `
+          <strong>📝 Next Steps:</strong><br>
+          1. Open: /home/jackoby/Desktop/hackathon/backend/server.js<br>
+          2. Replace the OPENROUTER_API_KEY value (line 10)<br>
+          3. Restart backend: cd backend && npm start
+        `;
+        document.getElementById('apiKeyMessage').appendChild(instructions);
+      }, 2000);
+    }
+
+    // Load model list
+    function loadModelList() {
+      const customModels = localStorage.getItem('customModels');
+      const models = customModels ? JSON.parse(customModels) : DEFAULT_MODELS;
+
+      const listHtml = models.map((model, index) => `
+        <div class="model-item">
+          <span>${model}</span>
+          <button class="model-remove-btn" onclick="removeModel(${index})">Remove</button>
+        </div>
+      `).join('');
+
+      document.getElementById('modelList').innerHTML = listHtml || '<div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5);">No models configured</div>';
+    }
+
+    // Add new model
+    function addModel() {
+      const newModel = document.getElementById('newModel').value.trim();
+      
+      if (!newModel) {
+        showMessage('modelMessage', '⚠️ Please enter a model name.', 'error');
+        return;
+      }
+
+      // Validate model format
+      if (!newModel.includes('/')) {
+        showMessage('modelMessage', '⚠️ Invalid format. Use: provider/model-name', 'error');
+        return;
+      }
+
+      const customModels = localStorage.getItem('customModels');
+      const models = customModels ? JSON.parse(customModels) : [...DEFAULT_MODELS];
+
+      if (models.includes(newModel)) {
+        showMessage('modelMessage', '⚠️ Model already exists in the list.', 'error');
+        return;
+      }
+
+      models.push(newModel);
+      localStorage.setItem('customModels', JSON.stringify(models));
+      
+      document.getElementById('newModel').value = '';
+      loadModelList();
+      loadStats();
+      
+      showMessage('modelMessage', `✅ Added model: ${newModel}`, 'success');
+    }
+
+    // Remove model
+    function removeModel(index) {
+      const customModels = localStorage.getItem('customModels');
+      const models = customModels ? JSON.parse(customModels) : [...DEFAULT_MODELS];
+
+      if (models.length <= 1) {
+        showMessage('modelMessage', '⚠️ Cannot remove the last model. Add another one first.', 'error');
+        return;
+      }
+
+      const removedModel = models.splice(index, 1)[0];
+      localStorage.setItem('customModels', JSON.stringify(models));
+      
+      loadModelList();
+      loadStats();
+      
+      showMessage('modelMessage', `✅ Removed model: ${removedModel}`, 'success');
+    }
+
+    // Reset models to default
+    function resetModelsToDefault() {
+      if (confirm('Reset to default model list? This will remove all custom models.')) {
+        localStorage.removeItem('customModels');
+        loadModelList();
+        loadStats();
+        showMessage('modelMessage', '✅ Reset to default model list!', 'success');
+      }
+    }
+
+    // Confirm reset
+    function confirmReset() {
+      if (confirm('⚠️ Are you sure you want to reset ALL local storage?\n\nThis will delete:\n- Chat history\n- User profile\n- Dashboard data\n- All tasks\n\nThis action cannot be undone!')) {
+        resetLocalStorage();
+      }
+    }
+
+    // Reset local storage
+    function resetLocalStorage() {
+      const keysToDelete = [
+        'chatHistory',
+        'userProfile',
+        'dashboardData',
+        'userTasks'
+      ];
+
+      let deletedCount = 0;
+      keysToDelete.forEach(key => {
+        if (localStorage.getItem(key)) {
+          localStorage.removeItem(key);
+          deletedCount++;
+        }
+      });
+
+      showMessage('resetMessage', `✅ Successfully reset ${deletedCount} items from local storage!`, 'success');
+      loadStats();
+
+      setTimeout(() => {
+        showMessage('resetMessage', '🔄 Reloading page...', 'info');
+        setTimeout(() => window.location.reload(), 1000);
+      }, 2000);
+    }
+
+    // Check backend status
+    async function checkBackendStatus() {
+      const statusDiv = document.getElementById('backendStatus');
+      statusDiv.innerHTML = '<div class="alert alert-info">⏳ Checking backend...</div>';
+
+      try {
+        const response = await fetch(`${API_URL}/dashboard/main`);
+        const data = await response.json();
+
+        if (response.ok) {
+          statusDiv.innerHTML = `
+            <div class="alert alert-success">
+              <strong>✅ Backend Online</strong><br>
+              Server: ${API_URL}<br>
+              Metrics: ${data.metrics?.length || 0} points<br>
+              Tasks: ${data.tasks?.length || 0} items
+            </div>
+          `;
+        } else {
+          throw new Error('Backend returned error');
+        }
+      } catch (error) {
+        statusDiv.innerHTML = `
+          <div class="alert alert-error">
+            <strong>❌ Backend Offline</strong><br>
+            Error: ${error.message}<br>
+            Make sure the server is running on port 3001
+          </div>
+        `;
+      }
+    }
+
+    // Show message helper
+    function showMessage(elementId, message, type) {
+      const el = document.getElementById(elementId);
+      el.className = `alert alert-${type}`;
+      el.innerHTML = message;
+      el.style.display = 'block';
+      
+      setTimeout(() => {
+        el.style.display = 'none';
+      }, 5000);
+    }
+
+    // Auto-check backend on load
+    if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+      checkBackendStatus();
+    }
+  </script>
+
+</body>
+</html>
