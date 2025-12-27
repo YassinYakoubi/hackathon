@@ -183,3 +183,11 @@ if (document.readyState === 'loading') {
 
 // Show loading on page load
 window.addEventListener('load', showPageLoading);
+
+// Add About link to navigation
+const navLinks = document.querySelector('.nav-links');
+if (navLinks && !document.querySelector('[href="about.html"]')) {
+  const aboutLi = document.createElement('li');
+  aboutLi.innerHTML = '<a href="about.html" class="nav-link">About</a>';
+  navLinks.appendChild(aboutLi);
+}

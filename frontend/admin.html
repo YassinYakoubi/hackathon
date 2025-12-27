@@ -313,6 +313,13 @@
       margin-top: 15px;
     }
 
+    .server-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
     @media (max-width: 768px) {
       .page-content {
         padding-top: 80px;
@@ -335,7 +342,7 @@
         right: 10px;
       }
 
-      .btn-group {
+      .btn-group, .server-controls {
         grid-template-columns: 1fr;
       }
     }
@@ -393,6 +400,37 @@
             <!-- Stats will be loaded here -->
           </div>
         </div>
+
+        <!-- Server Controls -->
+        <div class="admin-card">
+          <h2>🖥️ Server Management</h2>
+          <div id="serverMessage" style="display: none;"></div>
+          
+          <div class="alert alert-info" style="margin-bottom: 20px;">
+            <strong>ℹ️ Quick Server Controls:</strong> Start or restart the backend server directly from here.
+          </div>
+
+          <div id="backendStatus">
+            <div class="alert alert-info">
+              Checking backend connection...
+            </div>
+          </div>
+
+          <div class="server-controls">
+            <button onclick="startServer()" class="btn btn-success">
+              ▶️ Start Server
+            </button>
+            <button onclick="checkBackendStatus()" class="btn btn-secondary">
+              🔄 Check Status
+            </button>
+          </div>
+
+          <div class="form-hint" style="margin-top: 15px; text-align: center;">
+            💡 Server runs on http://localhost:3001
+          </div>
+        </div>
+
+        <div class="divider"></div>
 
         <!-- API Key Management -->
         <div class="admin-card">
@@ -474,19 +512,6 @@
           
           <button onclick="confirmReset()" class="btn btn-danger">
             🔥 Reset All Local Storage
-          </button>
-        </div>
-
-        <!-- Backend Status -->
-        <div class="admin-card">
-          <h2>🖥️ Backend Status</h2>
-          <div id="backendStatus">
-            <div class="alert alert-info">
-              Checking backend connection...
-            </div>
-          </div>
-          <button onclick="checkBackendStatus()" class="btn btn-secondary">
-            🔄 Check Status
           </button>
         </div>
 
@@ -577,6 +602,31 @@
           <div class="stat-label">${stat.label}</div>
         </div>
       `).join('');
+    }
+
+    // Start server
+    function startServer() {
+      showMessage('serverMessage', '🚀 Opening terminal to start server...', 'info');
+      
+      // Show instructions
+      setTimeout(() => {
+        const instructions = document.createElement('div');
+        instructions.className = 'alert alert-info';
+        instructions.innerHTML = `
+          <strong>📝 To start the server:</strong><br>
+          1. Open a terminal (Ctrl+\`)<br>
+          2. Run: cd /home/jackoby/Desktop/hackathon/backend<br>
+          3. Run: npm start<br>
+          <br>
+          <em>Or use VS Code integrated terminal and run these commands manually.</em>
+        `;
+        document.getElementById('serverMessage').appendChild(instructions);
+      }, 1000);
+
+      // Auto-check status after 5 seconds
+      setTimeout(() => {
+        checkBackendStatus();
+      }, 5000);
     }
 
     // Load current API key
